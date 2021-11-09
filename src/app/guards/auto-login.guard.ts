@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map, take, takeLast } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Injectable({
@@ -14,10 +14,6 @@ export class AutoLoginGuard implements CanLoad {
       filter((isAuthenticated) => isAuthenticated !== null),
       take(1),
       map((isAuthenticated) => {
-        console.log(
-          '🚀 ~ file: auto-login.guard.ts ~ line 16 ~ AutoLoginGuard ~ map ~ isAuthenticated',
-          isAuthenticated
-        );
         if (isAuthenticated) {
           this.router.navigateByUrl('home', { replaceUrl: true });
         } else {

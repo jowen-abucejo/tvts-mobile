@@ -30,6 +30,14 @@ const routes: Routes = [
       import('./pages/home/home.module').then((m) => m.HomePageModule),
     canLoad: [AuthGuard],
   },
+  {
+    path: 'create-ticket',
+    loadChildren: () =>
+      import('./pages/create-ticket/create-ticket.module').then(
+        (m) => m.CreateTicketPageModule
+      ),
+    canLoad: [AuthGuard],
+  },
 ];
 
 @NgModule({

@@ -3,12 +3,8 @@ import { Storage } from '@ionic/storage-angular';
 import cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { BehaviorSubject, from, of } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
-export const TOKEN_KEYS = {
-  TYPE: 'type',
-  TOKEN: 'token',
-  REFRESH: 'refresh',
-  VALIDITY: 'expired_at',
-};
+export const TOKEN_KEY = '__token';
+const URL_KEY_PREFIX = '__url_';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +42,25 @@ export class StorageService {
 
   public async remove(key: string) {
     await this._storage.remove(key);
+  }
+
+  cacheData(url: string, data: any) {
+    const token: any = this.get(TOKEN_KEY).toPromise();
+    const validUntil = token.expired_at;
+    url = URL_KEY_PREFIX + url;
+    return this.set(url, { validUntil, data });
+  }
+
+  async getCachedData(url: string) {
+    url = URL_KEY_PREFIX + url;
+    const cachedValue = await this.get(url).toPromise();
+    if (!cachedValue) {
+      return null;
+    } else if (cachedValue.validUntil < Date.now()) {
+      await this.remove(url);
+      return null;
+    } else {
+      return cachedValue.data;
+    }
   }
 }
