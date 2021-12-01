@@ -1,0 +1,10 @@
+ion-grid,
+ion-row {
+  height: 100%;
+}
+#QRImg {
+  background-color: brown;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid blue;
+}

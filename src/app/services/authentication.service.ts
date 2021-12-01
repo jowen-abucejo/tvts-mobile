@@ -19,8 +19,7 @@ export class AuthenticationService {
   createHeaderWithToken() {
     const header = new HttpHeaders({
       Accept: 'application/json',
-      Authorization:
-        this.token.data.token_type + ' ' + this.token.data.access_token,
+      Authorization: `${this.token.data.token_type} ${this.token.data.access_token}`,
     });
     return header;
   }
@@ -34,12 +33,8 @@ export class AuthenticationService {
 
   private createRequestBody(username: string, password: string) {
     const body = {
-      grant_type: 'password',
-      client_id: '2',
-      client_secret: 'zoUUqBLPwd0hBeb8zk2Li57A3OL4tZIuwCLSCobh',
       username: username,
       password: password,
-      scope: '',
     };
     return body;
   }
@@ -77,6 +72,15 @@ export class AuthenticationService {
   }
 
   logout() {
+    if (this.token) {
+      this.http.post(
+        API_URL.REQUEST_LOGOUT,
+        {},
+        {
+          headers: this.createHeaderWithToken(),
+        }
+      );
+    }
     this.storage.remove(TOKEN_KEY);
     this.isAuthenticated.next(false);
   }

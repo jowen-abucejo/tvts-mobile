@@ -6,8 +6,15 @@ import { CreateTicketPage } from './create-ticket.page';
 const routes: Routes = [
   {
     path: '',
-    component: CreateTicketPage
-  }
+    component: CreateTicketPage,
+  },
+  {
+    path: 'generate-qrcode',
+    loadChildren: () =>
+      import('./generate-qrcode/generate-qrcode.module').then(
+        (m) => m.GenerateQrcodePageModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,9 @@
+ion-label,
+ion-item > ion-label {
+  color: var(--ion-color-primary);
+}
+.item-interactive-disabled:not(.item-multiple-inputs) .sc-ion-label-md-h,
+.toggle-disabled {
+  cursor: default;
+  opacity: 1;
+}

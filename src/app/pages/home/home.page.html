@@ -1,29 +1,33 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
+<ion-header *ngIf="isScanning">
+  <ion-toolbar color="primary">
+    <ion-title>Scan QR Code</ion-title>
   </ion-toolbar>
-</ion-header> -->
-
-<ion-content slot="fixed" [fullscreen]="true" color="light">
+</ion-header>
+<ion-content
+  slot="fixed"
+  [fullscreen]="true"
+  [style.--background]="isScanning ? '#00000000' : '--ion-color-light'"
+>
   <ion-grid fixed>
-    <ion-row class="ion-align-items-center ion-justify-content-center">
-      <ion-col size-md="6" size-lg="5" class="ion-align-items-center">
-        <!-- <ion-card class="ion-align-self-center">
-          <ion-card-content> -->
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col
+        size-md="6"
+        size-lg="5"
+        class="ion-align-items-center"
+        *ngIf="!isScanning"
+      >
         <ion-button
-          [routerLink]="['/create-ticket']"
-          routerLinkActive="router-link-active"
+          (click)="promptLicenseNumberField()"
           expand="block"
           fill="solid"
           shape="round"
           class="ion-padding-horizontal"
         >
           <ion-icon slot="start" name="create-outline"></ion-icon>
-          Create Citation Ticket
+          Create Ticket
         </ion-button>
         <ion-button
-          [routerLink]="['/create']"
-          routerLinkActive="router-link-active"
+          (click)="promptTicketNumberField()"
           expand="block"
           fill="solid"
           shape="round"
@@ -33,6 +37,19 @@
           <ion-icon slot="start" name="search-outline"></ion-icon>
           Search Ticket
         </ion-button>
+
+        <ion-button
+          (click)="scanQRSearch()"
+          expand="block"
+          fill="solid"
+          shape="round"
+          color="success"
+          class="ion-padding-horizontal"
+        >
+          <ion-icon slot="start" name="scan-outline"></ion-icon>
+          Scan QR Code
+        </ion-button>
+
         <ion-button
           expand="block"
           fill="solid"
@@ -44,9 +61,20 @@
           <ion-icon slot="start" name="log-out-outline"></ion-icon>
           Logout
         </ion-button>
-        <!-- </ion-card-content>
-        </ion-card> -->
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div class="scanbox" *ngIf="isScanning"></div>
 </ion-content>
+<ion-footer *ngIf="isScanning">
+  <ion-button
+    expand="block"
+    fill="solid"
+    color="danger"
+    class="ion-padding-horizontal"
+    (click)="stopQRScan()"
+  >
+    <ion-icon slot="start" name="close-outline"></ion-icon>
+    Stop Scan
+  </ion-button>
+</ion-footer>

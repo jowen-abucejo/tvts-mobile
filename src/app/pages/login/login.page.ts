@@ -34,17 +34,20 @@ export class LoginPage implements OnInit {
         this.loginFormGroup.get('passCtrl').value
       )
       .subscribe(
+        //redirect on successful login
         async (res) => {
           await loading.dismiss();
           this.router.navigateByUrl('home', { replaceUrl: true });
         },
+
+        //show error message
         async (res) => {
           await loading.dismiss();
           const alert = await this.alertCtrl.create({
             header: 'Login Failed',
-            message: res.error.error,
             buttons: ['OK'],
           });
+          console.log(res);
           alert.present();
         }
       );

@@ -4,15 +4,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { AutoLoginGuard } from './guards/auto-login.guard';
 
 const routes: Routes = [
-  // {
-  //   path: 'home',
-  //   loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  // },
-  // {
-  //   path: '',
-  //   redirectTo: 'home',
-  //   pathMatch: 'full'
-  // },
   {
     path: '',
     redirectTo: 'login',
@@ -37,6 +28,13 @@ const routes: Routes = [
         (m) => m.CreateTicketPageModule
       ),
     canLoad: [AuthGuard],
+  },
+  {
+    path: 'read-ticket',
+    loadChildren: () =>
+      import('./pages/read-ticket/read-ticket.module').then(
+        (m) => m.ReadTicketPageModule
+      ),
   },
 ];
 
