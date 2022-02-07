@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, from } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { API_URL } from './api.service';
+import { ConfigService } from './config.service';
 import { StorageService, TOKEN_KEY } from './storage.service';
 
 @Injectable({
@@ -10,10 +11,28 @@ import { StorageService, TOKEN_KEY } from './storage.service';
 })
 export class AuthenticationService {
   isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(null);
+  isSuAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject(null);
   public token: any = {};
-
-  constructor(private http: HttpClient, private storage: StorageService) {
+  public api: BehaviorSubject<{ domain: string; version: string }> =
+    new BehaviorSubject({ domain: '', version: '' });
+  private api_object = { domain: '', version: '' };
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+    private config: ConfigService
+  ) {
     this.loadToken();
+    this.api
+      .pipe(
+        map((api) => {
+          this.api_object = api;
+        })
+      )
+      .subscribe();
+
+    this.config.getApiDomain().then((data) => {
+      this.api.next(data);
+    });
   }
 
   createHeaderWithToken() {
@@ -31,26 +50,34 @@ export class AuthenticationService {
     return header;
   }
 
-  private createRequestBody(username: string, password: string) {
-    const body = {
-      username: username,
-      password: password,
-    };
-    return body;
-  }
-
-  async loadToken() {
+  async loadToken(logout_fallback: boolean = true) {
     this.token = await this.storage.get(TOKEN_KEY).pipe(take(1)).toPromise();
     if (this.token !== null && this.token.expired_at > Date.now()) {
       this.isAuthenticated.next(true);
     } else {
-      this.logout();
+      logout_fallback ? this.logout() : '';
     }
   }
 
-  login(username: string, password: string) {
+  async isSuperuser(username: string, password: string) {
+    const su = await this.config.getSuperUser();
+    if (su.username == username && su.password == password) {
+      this.isSuAuthenticated.next(true);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  login(username: string, password: string, re_login: boolean = false) {
+    let url = `${this.api_object?.domain}/api/${API_URL.REQUEST_TOKEN}`;
+    const body = {
+      username: username,
+      password: password,
+      api_version: this.api_object?.version,
+    };
     return this.http
-      .post(API_URL.REQUEST_TOKEN, this.createRequestBody(username, password), {
+      .post(url, body, {
         headers: this.createHeaderWithOutToken(),
       })
       .pipe(
@@ -63,25 +90,30 @@ export class AuthenticationService {
             data,
             expired_at: Date.now() + data.expires_in,
           });
-          return from(this.loadToken());
+          return from(this.loadToken(!re_login));
         }),
         tap((_) => {
           this.isAuthenticated.next(true);
         })
-      );
+      )
+      .toPromise();
   }
 
-  logout() {
+  async logout() {
     if (this.token) {
-      this.http.post(
-        API_URL.REQUEST_LOGOUT,
-        {},
-        {
-          headers: this.createHeaderWithToken(),
-        }
-      );
+      await this.http
+        .post(
+          `${this.api_object.domain}/api/${this.api_object.version}/${API_URL.REQUEST_LOGOUT}`,
+          {},
+          {
+            headers: this.createHeaderWithToken(),
+          }
+        )
+        .toPromise()
+        .catch(() => {});
     }
     this.storage.remove(TOKEN_KEY);
     this.isAuthenticated.next(false);
+    return true;
   }
 }

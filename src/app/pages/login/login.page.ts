@@ -1,55 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { UtilityService } from '../../services/utility.service';
 import { AuthenticationService } from '../../services/authentication.service';
+import { ViewDidLeave } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, ViewDidLeave {
+  loading: HTMLIonLoadingElement;
   loginFormGroup = new FormGroup({
-    unameCtrl: new FormControl('', Validators.required),
-    passCtrl: new FormControl('', Validators.required),
+    unameCtrl: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-ZÑñ0-9@$_.]*'),
+    ]),
+    passCtrl: new FormControl('', [
+      Validators.required,
+      Validators.pattern('[a-zA-ZÑñ0-9@$_.]*'),
+    ]),
   });
 
   constructor(
     private auth: AuthenticationService,
     private router: Router,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private utility: UtilityService
   ) {}
+  ionViewDidLeave(): void {
+    this.loginFormGroup.get('unameCtrl').setValue('');
+    this.loginFormGroup.get('passCtrl').setValue('');
+  }
 
   ngOnInit() {}
 
   async login() {
-    const loading = await this.loadingCtrl.create();
-    await loading.present();
+    this.loading = await this.utility.createIonLoading();
+    await this.loading.present();
+    let u = this.loginFormGroup.get('unameCtrl').value;
+    let p = this.loginFormGroup.get('passCtrl').value;
 
-    this.auth
-      .login(
-        this.loginFormGroup.get('unameCtrl').value,
-        this.loginFormGroup.get('passCtrl').value
-      )
-      .subscribe(
+    //check if user is superuser
+    let isSuperuser = await this.auth.isSuperuser(u, p);
+
+    if (isSuperuser) {
+      this.loading.dismiss();
+      this.router.navigateByUrl('settings');
+    } else {
+      this.auth.login(u, p).then(
         //redirect on successful login
-        async (res) => {
-          await loading.dismiss();
+        (res) => {
+          this.loading.dismiss();
           this.router.navigateByUrl('home', { replaceUrl: true });
         },
 
         //show error message
         async (res) => {
-          await loading.dismiss();
-          const alert = await this.alertCtrl.create({
-            header: 'Login Failed',
-            buttons: ['OK'],
-          });
-          console.log(res);
-          alert.present();
+          this.loading.dismiss();
+          await this.utility.alertErrorStatus(res, false);
         }
       );
+    }
   }
 }

@@ -50,4 +50,8 @@
       tools:ignore="ManifestOrder" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
+
+    <queries>
+      <package android:name="tvts.mobile" />
+    </queries>
 </manifest>

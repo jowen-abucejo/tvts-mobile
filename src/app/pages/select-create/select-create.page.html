@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Create Ticket </ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="['/select-search']"
+        routerLinkActive="router-link-active"
+        ><ion-icon name="search-outline"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content slot="fixed" [fullscreen]="true">
+  <ion-grid fixed>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col size-md="6" size-lg="5" class="ion-align-items-center">
+        <ion-card color="light" class="ion-padding-vertical">
+          <ion-card-content class="ion-text-center">
+            <form [formGroup]="createFormGroup1" (ngSubmit)="createTicket(1)">
+              <ion-icon
+                color="primary"
+                slot="start"
+                name="card-outline"
+                style="font-size: 4rem"
+              ></ion-icon>
+              <ion-card-title class="ion-margin-bottom"
+                >PROVIDE DRIVER'S LICENSE NUMBER</ion-card-title
+              >
+              <ion-item>
+                <ion-label position="floating">License Number</ion-label>
+                <ion-input
+                  type="text"
+                  placeholder="Enter license number"
+                  formControlName="license_number"
+                ></ion-input>
+              </ion-item>
+              <ion-button
+                type="submit"
+                color="primary"
+                [disabled]="!createFormGroup1.valid"
+                class="ion-margin-vertical"
+                expand="block"
+              >
+                Create New Ticket
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+        <br />
+        <ion-card color="light" class="ion-padding-vertical">
+          <ion-card-content class="ion-text-center">
+            <form [formGroup]="createFormGroup2" (ngSubmit)="createTicket(2)">
+              <ion-icon
+                color="primary"
+                slot="start"
+                name="person-add-outline"
+                style="font-size: 4rem"
+              ></ion-icon>
+              <ion-card-title class="ion-margin-bottom"
+                >PROVIDE VIOLATOR'S DETAILS</ion-card-title
+              >
+              <ion-item>
+                <ion-label position="floating">Last Name</ion-label>
+                <ion-input
+                  type="text"
+                  placeholder="Enter last name"
+                  formControlName="last_name"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">First Name</ion-label>
+                <ion-input
+                  type="text"
+                  placeholder="Enter first name"
+                  formControlName="first_name"
+                ></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Middle Name</ion-label>
+                <ion-input
+                  type="text"
+                  placeholder="Enter middle name"
+                  formControlName="middle_name"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Birth Date</ion-label>
+                <ion-datetime
+                  display-format="DD.MMM.YYYY"
+                  formControlName="birth_date"
+                ></ion-datetime>
+              </ion-item>
+              <ion-button
+                type="submit"
+                color="primary"
+                [disabled]="!createFormGroup2.valid"
+                class="ion-margin-vertical"
+                expand="block"
+              >
+                Create New Ticket
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

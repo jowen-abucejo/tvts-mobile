@@ -1,80 +1,61 @@
-<ion-header *ngIf="isScanning">
+<ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Scan QR Code</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Home </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content
-  slot="fixed"
-  [fullscreen]="true"
-  [style.--background]="isScanning ? '#00000000' : '--ion-color-light'"
->
+<ion-content slot="fixed" [fullscreen]="true">
   <ion-grid fixed>
     <ion-row class="ion-justify-content-center ion-align-items-center">
-      <ion-col
-        size-md="6"
-        size-lg="5"
-        class="ion-align-items-center"
-        *ngIf="!isScanning"
-      >
-        <ion-button
-          (click)="promptLicenseNumberField()"
-          expand="block"
-          fill="solid"
-          shape="round"
-          class="ion-padding-horizontal"
+      <ion-col size-md="6" size-lg="5" class="ion-align-items-center">
+        <ion-card
+          button
+          [routerLink]="['/select-create']"
+          routerLinkActive="router-link-active"
+          color="primary"
+          class="ion-padding-vertical"
         >
-          <ion-icon slot="start" name="create-outline"></ion-icon>
-          Create Ticket
-        </ion-button>
-        <ion-button
-          (click)="promptTicketNumberField()"
-          expand="block"
-          fill="solid"
-          shape="round"
+          <ion-card-content class="ion-text-center">
+            <ion-icon
+              slot="start"
+              name="create-outline"
+              style="font-size: 4rem"
+            ></ion-icon>
+            <ion-card-title class="ion-margin-bottom"
+              ><b>CREATE TICKET</b></ion-card-title
+            >
+            <ion-card-subtitle class="ion-margin-horizontal">
+              Issue new violation citation ticket, generate QR code and send
+              notifications
+            </ion-card-subtitle>
+          </ion-card-content>
+        </ion-card>
+        <br />
+        <ion-card
+          button
+          [routerLink]="['/select-search']"
+          routerLinkActive="router-link-active"
           color="warning"
-          class="ion-padding-horizontal"
+          class="ion-padding-vertical"
         >
-          <ion-icon slot="start" name="search-outline"></ion-icon>
-          Search Ticket
-        </ion-button>
-
-        <ion-button
-          (click)="scanQRSearch()"
-          expand="block"
-          fill="solid"
-          shape="round"
-          color="success"
-          class="ion-padding-horizontal"
-        >
-          <ion-icon slot="start" name="scan-outline"></ion-icon>
-          Scan QR Code
-        </ion-button>
-
-        <ion-button
-          expand="block"
-          fill="solid"
-          shape="round"
-          color="danger"
-          class="ion-padding-horizontal"
-          (click)="logout()"
-        >
-          <ion-icon slot="start" name="log-out-outline"></ion-icon>
-          Logout
-        </ion-button>
+          <ion-card-content class="ion-text-center">
+            <ion-icon
+              slot="start"
+              name="search-outline"
+              style="font-size: 4rem"
+            ></ion-icon>
+            <ion-card-title class="ion-margin-bottom"
+              ><b>SEARCH TICKET</b></ion-card-title
+            >
+            <ion-card-subtitle class="ion-margin-horizontal">
+              View ticket details by scanning QR code or searching by ticket
+              number
+            </ion-card-subtitle>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <div class="scanbox" *ngIf="isScanning"></div>
 </ion-content>
-<ion-footer *ngIf="isScanning">
-  <ion-button
-    expand="block"
-    fill="solid"
-    color="danger"
-    class="ion-padding-horizontal"
-    (click)="stopQRScan()"
-  >
-    <ion-icon slot="start" name="close-outline"></ion-icon>
-    Stop Scan
-  </ion-button>
-</ion-footer>

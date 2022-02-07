@@ -1,13 +1,11 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content slot="fixed" [fullscreen]="true" color="light">
   <ion-grid fixed>
     <ion-row class="ion-align-items-center ion-justify-content-center">
       <ion-col size-md="6" size-lg="5">
+        <h3 class="ion-text-center">TRAFFIC VIOLATION TICKETING SYSTEM</h3>
+        <h5 class="ion-text-center">
+          <i>with QR Code and SMS Notification</i>
+        </h5>
         <ion-card class="ion-align-self-center">
           <ion-card-header color="primary">
             <ion-card-subtitle>Login to your account</ion-card-subtitle>
@@ -37,7 +35,7 @@
               <ion-button
                 type="submit"
                 expand="block"
-                fill="outline"
+                fill="solid"
                 color="primary"
                 class="ion-margin-vertical"
                 [disabled]="!loginFormGroup.valid"
@@ -47,6 +45,9 @@
             </form>
           </ion-card-content>
         </ion-card>
+        <ion-avatar class="ion-align-self-center">
+          <img src="../../../assets/CvSU-NaicLogo.png" />
+        </ion-avatar>
       </ion-col>
     </ion-row>
   </ion-grid>

@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title *ngIf="!isScanning">Read Ticket </ion-title>
+    <ion-title *ngIf="isScanning">Scan QRCode </ion-title>
+    <ion-buttons slot="end" *ngIf="!isScanning">
+      <ion-button
+        [routerLink]="['/select-create']"
+        routerLinkActive="router-link-active"
+        ><ion-icon name="create-outline"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content
+  slot="fixed"
+  [fullscreen]="true"
+  [style.--background]="isScanning ? '#00000000' : '--ion-color-light'"
+>
+  <ion-grid fixed>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col
+        size-md="6"
+        size-lg="5"
+        class="ion-align-items-center"
+        *ngIf="!isScanning"
+      >
+        <ion-card color="light" class="ion-padding-vertical">
+          <ion-card-content class="ion-text-center">
+            <ion-icon
+              color="primary"
+              slot="start"
+              name="scan-outline"
+              style="font-size: 4rem"
+            ></ion-icon>
+            <ion-card-title class="ion-margin-bottom"
+              >SCAN QR CODE</ion-card-title
+            >
+            <ion-button
+              (click)="scanQRSearch()"
+              color="primary"
+              class="ion-margin-vertical"
+              expand="block"
+            >
+              Start Scanning
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+        <br />
+        <ion-card color="light" class="ion-padding-vertical">
+          <ion-card-content class="ion-text-center">
+            <form [formGroup]="searchFormGroup" (ngSubmit)="searchTicket()">
+              <ion-icon
+                color="primary"
+                slot="start"
+                name="search-outline"
+                style="font-size: 4rem"
+              ></ion-icon>
+              <ion-card-title class="ion-margin-bottom"
+                >SEARCH TICKET</ion-card-title
+              >
+              <ion-item>
+                <ion-label position="floating">Ticket Number</ion-label>
+                <ion-input
+                  type="text"
+                  placeholder="Enter ticket number"
+                  formControlName="ticket_number"
+                ></ion-input>
+              </ion-item>
+              <ion-button
+                type="submit"
+                color="primary"
+                [disabled]="!searchFormGroup.valid"
+                class="ion-margin-vertical"
+                expand="block"
+              >
+                Start Searching
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div class="scanbox" *ngIf="isScanning"></div>
+</ion-content>
+<ion-footer *ngIf="isScanning">
+  <ion-button
+    expand="block"
+    fill="solid"
+    color="danger"
+    class="ion-padding-horizontal"
+    (click)="stopQRScan()"
+  >
+    <ion-icon slot="start" name="close-outline"></ion-icon>
+    Stop Scan
+  </ion-button>
+</ion-footer>

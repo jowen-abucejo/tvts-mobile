@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Ticket {{ ticket_data.number}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="['/select-search']"
+        routerLinkActive="router-link-active"
+        replaceUrl="true"
+        ><ion-icon name="close"></ion-icon
+      ></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="ticketFormGroup">
+    <ion-list>
+      <ion-list-header color="warning">
+        <ion-label class="ion-text-center"
+          ><b style="color: black"
+            >OFFENSE #{{ ticket_data?.offense_number }}&nbsp;:&nbsp;<i
+              >( {{ ticket_data?.status_text }} )</i
+            ></b
+          ></ion-label
+        >
+      </ion-list-header>
+      <ion-list-header color="light">
+        <ion-label color="dark">DRIVER'S DETAILS</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label position="floating">Last Name</ion-label>
+        <ion-input formControlName="last_name" readonly="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">First Name</ion-label>
+        <ion-input formControlName="first_name" readonly="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Middle Name</ion-label>
+        <ion-input formControlName="middle_name" readonly="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Birth Date</ion-label>
+        <ion-datetime
+          display-format="DD.MMM.YYYY"
+          formControlName="birth_date"
+          readonly="true"
+        ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Driver's License Number</ion-label>
+        <ion-input formControlName="license_number" readonly="true"></ion-input>
+      </ion-item>
+      <ng-container *ngIf="ticket_data">
+        <app-custom-input
+          [parentForm]="ticketFormGroup"
+          *ngFor="let extra_input of ticket_data.violator.extra_properties"
+          [type]="extra_input.propertyDescription.data_type"
+          [label]="extra_input.propertyDescription.text_label"
+          controller="{{ extra_input.propertyDescription.property }}"
+          [alertOptions]="customAlertOptions"
+          [isMultipleSelect]="extra_input.propertyDescription.is_multiple_select"
+          [options]="extra_input.propertyDescription.options"
+          (toggleEvent)="toggleValue($event)"
+          (imageCaptureEvent)="pushImage($event)"
+          [disabled]="true"
+        ></app-custom-input>
+      </ng-container>
+    </ion-list>
+    <ion-list>
+      <ion-list-header color="light">
+        <ion-label color="dark">TRAFFIC RELATED VIOLATION</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label position="floating">Vehicle Type</ion-label>
+        <ion-input readonly="true" formControlName="vehicle_type"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Committed Violations</ion-label>
+        <ion-select
+          multiple="true"
+          formControlName="committed_violations"
+          [interfaceOptions]="customAlertOptions"
+        >
+          <ion-select-option
+            *ngFor="let violation of ticket_data.violations"
+            value="{{ violation.id  }}"
+            disabled="true"
+            >{{ violation.violation }}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Date and Time of Apprehension</ion-label>
+        <ion-datetime
+          readonly="true"
+          display-format="DD.MMM.YYYY H:mm A"
+          formControlName="apprehension_datetime"
+        ></ion-datetime>
+      </ion-item>
+      <ng-container *ngIf="ticket_data">
+        <app-custom-input
+          [parentForm]="ticketFormGroup"
+          *ngFor="let extra_input of ticket_data.extra_properties"
+          [type]="extra_input.propertyDescription.data_type"
+          [label]="extra_input.propertyDescription.text_label"
+          controller="{{ extra_input.propertyDescription.property }}"
+          [alertOptions]="customAlertOptions"
+          [isMultipleSelect]="extra_input.propertyDescription.is_multiple_select"
+          [options]="extra_input.propertyDescription.options"
+          (toggleEvent)="toggleValue($event)"
+          (imageCaptureEvent)="pushImage($event)"
+          [disabled]="true"
+        ></app-custom-input>
+      </ng-container>
+    </ion-list>
+  </form>
+</ion-content>

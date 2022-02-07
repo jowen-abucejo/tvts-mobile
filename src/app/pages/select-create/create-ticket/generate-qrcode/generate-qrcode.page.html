@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Generated QRCode</ion-title>
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="['/select-create']"
+        routerLinkActive="router-link-active"
+        >Close</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid fixed>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size-md="6" size-lg="5">
+        <div #qrcode id="QRImg">
+          <div id="ticketDetails">
+            <br />
+            <h5>Ticket Details</h5>
+            <p>
+              <span class="info-label">Driver's Name:</span> {{
+              ticket_details.violator.first_name }} {{
+              ticket_details.violator.middle_name }} {{
+              ticket_details.violator.last_name }}
+            </p>
+            <p>
+              <span class="info-label">Offense #:</span> {{
+              ticket_details.offense_number }}
+            </p>
+            <p>
+              <span class="info-label">Date and Time:</span> {{
+              ticket_details.apprehension_datetime }}
+            </p>
+            <p>
+              <span class="info-label">Apprehending Officer:</span> {{
+              ticket_details.issued_by }}
+            </p>
+
+            <p><span class="info-label">Violations and Penalties:</span></p>
+            <ol style="margin-top: -10px">
+              <li
+                class="violation-item"
+                *ngFor="let violation of ticket_details.violations; let last = last;"
+              >
+                {{ violation.violation }} .......
+                <span *ngFor="let type of violation.violation_types"
+                  ><b
+                    *ngIf="type.vehicle_type==ticket_details.vehicle_type && penalty_index < type.penalties.length"
+                    >&#8369; {{ type.penalties[penalty_index] }}
+                  </b>
+                  <b
+                    *ngIf="type.vehicle_type==ticket_details.vehicle_type && penalty_index >= type.penalties.length; "
+                    >&#8369; {{ type.penalties[type.penalties.length-1] }}
+                  </b>
+                </span>
+              </li>
+            </ol>
+            <br /><br />
+            <p class="ion-text-center ion-margin-vertical">
+              <i>********* Nothing Follows ********* </i>
+            </p>
+          </div>
+        </div>
+        <ion-button
+          (click)="shareQRCode()"
+          expand="block"
+          fill="solid"
+          class="ion-margin"
+        >
+          <ion-icon name="share-social-outline" slot="start"></ion-icon>
+          Share
+        </ion-button>
+        <ion-button
+          color="danger"
+          expand="block"
+          fill="solid"
+          class="ion-margin"
+          [routerLink]="['/home']"
+          routerLinkActive="router-link-active"
+          [replaceUrl]="true"
+        >
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Close
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

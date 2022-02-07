@@ -1,0 +1,26 @@
+ion-grid,
+ion-row {
+  height: 100%;
+}
+
+ion-label,
+ion-item > ion-label {
+  color: var(--ion-color-primary);
+}
+
+ion-item {
+  --highlight-color-valid: var(--ion-color-primary);
+}
+
+.scanbox {
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
+  content: "";
+  display: block;
+  left: 50%;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+}
