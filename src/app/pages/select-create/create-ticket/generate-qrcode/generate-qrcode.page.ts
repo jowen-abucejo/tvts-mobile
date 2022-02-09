@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { FileSharer } from '@byteowls/capacitor-filesharer';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { ViewDidLeave } from '@ionic/angular';
 import QRCode from 'easyqrcodejs';
 import * as htmlToImage from 'html-to-image';
 import { ApiService } from '../../../../services/api.service';
@@ -16,8 +18,9 @@ import { ApiService } from '../../../../services/api.service';
   templateUrl: './generate-qrcode.page.html',
   styleUrls: ['./generate-qrcode.page.scss'],
 })
-export class GenerateQrcodePage implements OnInit, AfterViewInit {
+export class GenerateQrcodePage implements OnInit, AfterViewInit, ViewDidLeave {
   private isSentToServer: boolean = false;
+  private filepath: string;
   trigger = false;
   private routeState: any;
   private qr_text: any;
@@ -36,6 +39,15 @@ export class GenerateQrcodePage implements OnInit, AfterViewInit {
       this.penalty_index = parseInt(this.ticket_details.offense_number) - 1;
     }
   }
+  ionViewDidLeave(): void {
+    if (this.filepath) {
+      Filesystem.deleteFile({
+        path: this.filepath,
+        directory: Directory.Data,
+      }).catch((err) => {});
+      this.filepath = null;
+    }
+  }
 
   ngOnInit() {}
 
@@ -45,12 +57,12 @@ export class GenerateQrcodePage implements OnInit, AfterViewInit {
     //qr code encoded data
     this.qr_text = {
       number: this.ticket_details.number,
-      violator: `${this.ticket_details.violator.first_name} ${this.ticket_details.violator.middle_name} ${this.ticket_details.violator.last_name}`,
-      offense_number: this.ticket_details.offense_number,
-      vehicle_type: this.ticket_details.vehicle_type,
-      apprehension_datetime: this.ticket_details.apprehension_datetime,
-      issued_by: this.ticket_details.issued_by,
-      violations: this.ticket_details.violations,
+      // violator: `${this.ticket_details.violator.first_name} ${this.ticket_details.violator.middle_name} ${this.ticket_details.violator.last_name}`,
+      // offense_number: this.ticket_details.offense_number,
+      // vehicle_type: this.ticket_details.vehicle_type,
+      // apprehension_datetime: this.ticket_details.apprehension_datetime,
+      // issued_by: this.ticket_details.issued_by,
+      // violations: this.ticket_details.violations,
     };
     // Options for QRCode
     const options = {
@@ -59,8 +71,6 @@ export class GenerateQrcodePage implements OnInit, AfterViewInit {
       titleColor: 'red',
       titleHeight: 50,
       titleTop: 25,
-      // subTitle: `Issued by: ${this.ticket_details.issued_by}`,
-      // subTitleTop: 43,
       quietZone: 10,
       quietZoneColor: 'white',
       width: 250,
@@ -80,40 +90,45 @@ export class GenerateQrcodePage implements OnInit, AfterViewInit {
     const dataUrl = await htmlToImage.toJpeg(document.getElementById('QRImg'), {
       quality: 0.95,
     });
-
-    // .then(async function (dataURL) {
-    //   const image = dataURL.replace('data:image/jpeg;base64,', '');
-    //   await FileSharer.share({
-    //     filename: 'Ticket.jpeg',
-    //     base64Data: image,
-    //     contentType: 'image/jpeg',
-    //   })
-    //     .then(() => {})
-    //     .catch((error) => {});
-    // });
     const image = dataUrl.replace('data:image/png;base64,', '');
+    const name = new Date().getTime() + '.jpeg';
+    this.filepath = 'temp_qr/' + name;
+    const res = await Filesystem.writeFile({
+      directory: Directory.Data,
+      path: this.filepath,
+      data: image,
+      recursive: true,
+    });
+
     await FileSharer.share({
-      filename: 'Ticket.jpeg',
-      base64Data: image,
+      filename: this.filepath,
+      base64Data: res.uri,
       contentType: 'image/jpeg',
-    })
-      .then(() => {})
-      .catch((error) => {});
+    }).then(
+      () => {},
+      (error) => {}
+    );
   }
 
   private async sendToServerAndEmail(ticket_number: string) {
     if (this.isSentToServer) return;
 
-    const blob = await htmlToImage.toBlob(document.getElementById('QRImg'));
-    const formData = new FormData();
+    let blob = await htmlToImage.toBlob(document.getElementById('QRImg'));
+    let formData = new FormData();
     formData.append('qrImage', blob);
-    await this.apiService.sendQRToEmail(ticket_number, formData).then(
-      (data: any) => {
-        this.isSentToServer = true;
-      },
-      (res) => {
-        this.isSentToServer = false;
-      }
-    );
+    await this.apiService
+      .sendQRToEmail(ticket_number, formData)
+      .then(
+        (data: any) => {
+          this.isSentToServer = true;
+        },
+        (res) => {
+          this.isSentToServer = false;
+        }
+      )
+      .finally(() => {
+        blob = null;
+        formData = null;
+      });
   }
 }

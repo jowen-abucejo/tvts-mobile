@@ -3,15 +3,6 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { AlertController, LoadingController, Platform } from '@ionic/angular';
 import { AuthenticationService } from './services/authentication.service';
-import { registerPlugin } from '@capacitor/core';
-
-export interface CustomPlugin {
-  restart(type: string): void;
-}
-
-const RestartPlugin = registerPlugin<CustomPlugin>('RestartPlugin');
-
-export default RestartPlugin;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

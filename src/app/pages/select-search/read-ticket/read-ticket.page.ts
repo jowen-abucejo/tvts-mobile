@@ -51,6 +51,7 @@ export class ReadTicketPage implements OnInit {
       ],
       vehicle_type: [this.ticket_data.vehicle_type],
       apprehension_datetime: [this.ticket_data.apprehension_datetime],
+      issued_by: [this.ticket_data.issued_by],
       committed_violations: [comm_violations],
     });
     this.attachExtraProperties();

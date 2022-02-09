@@ -98,6 +98,10 @@
           formControlName="apprehension_datetime"
         ></ion-datetime>
       </ion-item>
+      <ion-item>
+        <ion-label position="floating">Apprehending Officer</ion-label>
+        <ion-input readonly="true" formControlName="issued_by"></ion-input>
+      </ion-item>
       <ng-container *ngIf="ticket_data">
         <app-custom-input
           [parentForm]="ticketFormGroup"

@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import cordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 import { Drivers } from '@ionic/storage';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     }),
     HttpClientModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

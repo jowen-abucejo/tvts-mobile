@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
-// import { ConfigService } from './config.service';
 export const API_KEY = '_api';
 export const SU_KEY = '_su';
 export const API_URL = {
@@ -10,8 +9,6 @@ export const API_URL = {
   REQUEST_LOGOUT: `users/user/logout`,
   CONFIRM_PASSWORD: `users/user/confirm-password`,
   GROUPED_VIOLATIONS_AND_VEHICLE_TYPES: `violations/types/by-vehicle-types`,
-  // TEST_ADD_VIOLATION_TYPES: `violations/types/new`,
-  // TEST_ADD_VIOLATION: `violations/new`,
   GET_ONE_VIOLATOR: `violators/violator`,
   STORE_TICKET_DETAILS: `tickets/new`,
   GET_ONE_TICKET: `tickets/ticket`,
@@ -27,10 +24,7 @@ export const API_URL = {
 })
 export class ApiService {
   private api = { domain: '', version: '' };
-  constructor(
-    private http: HttpClient,
-    private auth: AuthenticationService // private config: ConfigService
-  ) {
+  constructor(private http: HttpClient, private auth: AuthenticationService) {
     this.auth.api
       .pipe(
         map((api) => {

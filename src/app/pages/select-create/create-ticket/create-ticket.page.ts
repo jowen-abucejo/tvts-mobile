@@ -207,16 +207,13 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
           cssClass: 'secondary',
           handler: async (credentials) => {
             if (credentials.password) {
-              const loading = await this.utility.createIonLoading();
-              loading.present();
               const formData = new FormData();
               formData.append('password', credentials.password);
               this.apiService.confirmPassword(formData).then(
                 async (data: any) => {
-                  this.loading = loading;
                   if (data.password_match_status === true) {
                     //save ticket details
-                    await this.saveTicketDetails();
+                    this.saveTicketDetails();
                   } else {
                     const alert = await this.utility.alertMessage(
                       'Ticket Creation Failed!',
@@ -228,11 +225,9 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
 
                 //show error message
                 async (res) => {
-                  loading.dismiss();
                   await this.utility.alertErrorStatus(res);
                 }
               );
-              loading.dismiss();
             } else {
               const alert = await this.utility.alertMessage(
                 'Ticket Creation Failed!'
@@ -253,6 +248,8 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
 
   //save ticket details to server
   async saveTicketDetails() {
+    this.loading = await this.utility.createIonLoading();
+    this.loading.present();
     this.apiService.saveTicket(this.formData).then(
       //redirect on success
       (data) => {

@@ -51,7 +51,11 @@ export class AuthenticationService {
   }
 
   async loadToken(logout_fallback: boolean = true) {
-    this.token = await this.storage.get(TOKEN_KEY).pipe(take(1)).toPromise();
+    const token_stored = await this.storage
+      .get(TOKEN_KEY)
+      .pipe(take(1))
+      .toPromise();
+    this.token = JSON.parse(token_stored);
     if (this.token !== null && this.token.expired_at > Date.now()) {
       this.isAuthenticated.next(true);
     } else {
@@ -86,10 +90,13 @@ export class AuthenticationService {
           return data;
         }),
         switchMap(async (data) => {
-          await this.storage.set(TOKEN_KEY, {
-            data,
-            expired_at: Date.now() + data.expires_in,
-          });
+          await this.storage.set(
+            TOKEN_KEY,
+            JSON.stringify({
+              data,
+              expired_at: Date.now() + data.expires_in,
+            })
+          );
           return from(this.loadToken(!re_login));
         }),
         tap((_) => {
