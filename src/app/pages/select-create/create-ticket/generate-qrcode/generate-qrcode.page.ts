@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -11,6 +12,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { ViewDidLeave } from '@ionic/angular';
 import QRCode from 'easyqrcodejs';
 import * as htmlToImage from 'html-to-image';
+import { deleteImage } from '../../../../modules/shared/custom-input/custom-input.component';
 import { ApiService } from '../../../../services/api.service';
 
 @Component({
@@ -18,10 +20,11 @@ import { ApiService } from '../../../../services/api.service';
   templateUrl: './generate-qrcode.page.html',
   styleUrls: ['./generate-qrcode.page.scss'],
 })
-export class GenerateQrcodePage implements OnInit, AfterViewInit, ViewDidLeave {
+export class GenerateQrcodePage
+  implements OnInit, AfterViewInit, ViewDidLeave, OnDestroy
+{
   private isSentToServer: boolean = false;
   private filepath: string;
-  trigger = false;
   private routeState: any;
   private qr_text: any;
   ticket_details: any;
@@ -39,13 +42,14 @@ export class GenerateQrcodePage implements OnInit, AfterViewInit, ViewDidLeave {
       this.penalty_index = parseInt(this.ticket_details.offense_number) - 1;
     }
   }
+  ngOnDestroy(): void {
+    if (this.filepath) {
+      deleteImage(this.filepath);
+    }
+  }
   ionViewDidLeave(): void {
     if (this.filepath) {
-      Filesystem.deleteFile({
-        path: this.filepath,
-        directory: Directory.Data,
-      }).catch((err) => {});
-      this.filepath = null;
+      deleteImage(this.filepath);
     }
   }
 

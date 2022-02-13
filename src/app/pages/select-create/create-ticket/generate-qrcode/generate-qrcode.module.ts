@@ -7,14 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { GenerateQrcodePageRoutingModule } from './generate-qrcode-routing.module';
 
 import { GenerateQrcodePage } from './generate-qrcode.page';
+import { SharedModule } from '../../../../modules/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GenerateQrcodePageRoutingModule
+    GenerateQrcodePageRoutingModule,
+    SharedModule,
   ],
-  declarations: [GenerateQrcodePage]
+  declarations: [GenerateQrcodePage],
 })
 export class GenerateQrcodePageModule {}

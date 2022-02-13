@@ -9,7 +9,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ViewDidLeave } from '@ionic/angular';
 import { ApiService } from '../../../services/api.service';
 export interface imageFile {
   property_name: string;
@@ -23,7 +23,7 @@ export async function deleteImage(filepath: string) {
   await Filesystem.deleteFile({
     directory: Directory.Data,
     path: filepath,
-  }).catch(() => {});
+  }).catch((err) => {});
 }
 
 @Component({
@@ -31,7 +31,7 @@ export async function deleteImage(filepath: string) {
   templateUrl: './custom-input.component.html',
   styleUrls: ['./custom-input.component.scss'],
 })
-export class CustomInputComponent implements OnInit, OnDestroy {
+export class CustomInputComponent implements OnInit, ViewDidLeave, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() type: string = 'text';
   @Input() controller!: string;
@@ -57,6 +57,12 @@ export class CustomInputComponent implements OnInit, OnDestroy {
     private alertCtrl: AlertController,
     private apiService: ApiService
   ) {}
+  ionViewDidLeave(): void {
+    // delete saved image when page destroy
+    if (this.base64.path) {
+      deleteImage(this.base64.path);
+    }
+  }
 
   ngOnInit() {
     if (this.disabled && this.type === 'image') {

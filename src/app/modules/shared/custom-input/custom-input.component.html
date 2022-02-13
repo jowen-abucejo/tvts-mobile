@@ -47,6 +47,7 @@
 <ion-item
   [formGroup]="parentForm"
   *ngIf="type == 'boolean' && !disabled && parentForm.get(controller)"
+  lines="full"
 >
   <ion-label>{{ label }}</ion-label>
   <ion-toggle (ionChange)="toggleValue()"></ion-toggle>
@@ -54,6 +55,7 @@
 <ion-item
   [formGroup]="parentForm"
   *ngIf="type == 'boolean' && disabled && parentForm.get(controller)"
+  lines="full"
 >
   <ion-label>{{ label }}</ion-label>
   <ion-toggle

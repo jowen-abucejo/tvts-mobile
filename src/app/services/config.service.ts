@@ -72,7 +72,6 @@ export class ConfigService {
     let v = version ? version : '';
     const api = { domain: d.replace(' ', ''), version: v.replace(' ', '') };
     await this.storage.set(API_KEY, JSON.stringify(api));
-    // if (reload) (<any>window)?.configure?.setApiDomain(d, v); //access electron exposed method to save api and reload application
   }
 
   /**

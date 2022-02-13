@@ -4,12 +4,14 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Account Settings</ion-title>
-    <ion-button
-      [routerLink]="['/home',]"
-      routerLinkActive="router-link-active"
-      replaceUrl="true"
-      ><ion-icon name="home-outline"></ion-icon
-    ></ion-button>
+    <ion-buttons slot="end">
+      <ion-button
+        [routerLink]="['/home',]"
+        routerLinkActive="router-link-active"
+        replaceUrl="true"
+        ><ion-icon name="home-outline"></ion-icon
+      ></ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content slot="fixed" [fullscreen]="true">
