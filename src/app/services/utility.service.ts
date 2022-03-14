@@ -104,6 +104,10 @@ export class UtilityService {
   }
 
   async alertErrorStatus(response: any, re_login: boolean = true) {
+    console.log(
+      '🚀 ~ file: utility.service.ts ~ line 107 ~ UtilityService ~ alertErrorStatus ~ response',
+      response
+    );
     if (response.status === 401 && re_login) {
       await this.alertReLogin();
     } else if (response.status === 401 && !re_login) {

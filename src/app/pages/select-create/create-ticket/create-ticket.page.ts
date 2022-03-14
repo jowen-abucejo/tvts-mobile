@@ -72,11 +72,11 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
     this.ticketFormGroup = this.formBuilder.group({
       last_name: [
         this.searched_violator ? this.searched_violator.last_name : '',
-        [Validators.required, Validators.pattern('[a-zA-ZÑñ ]*')],
+        [Validators.required, Validators.pattern('[a-zA-ZÑñ][a-zA-ZÑñ ]*')],
       ],
       first_name: [
         this.searched_violator ? this.searched_violator.first_name : '',
-        [Validators.required, Validators.pattern('[a-zA-ZÑñ ]*')],
+        [Validators.required, Validators.pattern('[a-zA-ZÑñ][a-zA-ZÑñ ]*')],
       ],
       middle_name: [
         this.searched_violator && this.searched_violator.middle_name != 'null'
@@ -253,15 +253,20 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
     this.apiService.saveTicket(this.formData).then(
       //redirect on success
       (data) => {
-        this.router.navigate(['generate-qrcode'], {
-          relativeTo: this.route,
-          state: { ticket: data },
-          replaceUrl: true,
-        });
+        this.router
+          .navigate(['generate-qrcode'], {
+            relativeTo: this.route,
+            state: { ticket: data },
+            replaceUrl: true,
+          })
+          .finally(() => {
+            this.loading.dismiss();
+          });
       },
       //show error message
       async (res) => {
         await this.utility.alertErrorStatus(res);
+        this.loading.dismiss();
       }
     );
   }
@@ -288,10 +293,9 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
   toggleValue(formCtrlName: string) {
     const vI = this.ticketFormGroup.get(formCtrlName);
     vI.setValue(!vI.value);
-    const v2 = this.ticketFormGroup.get('gender');
   }
 
-  //listen to custom components when it returns an image to be appended in form when before submission
+  //listen to custom components when it returns an image to be appended in form before submission
   async pushImage(image: imageFile) {
     let resp = await fetch(image.data);
     let blob = await resp.blob();

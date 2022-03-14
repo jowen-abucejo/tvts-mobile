@@ -28,7 +28,7 @@ export class SelectCreatePage implements OnInit {
     this.createFormGroup2 = this.formBuilder.group({
       first_name: [
         '',
-        [Validators.required, Validators.pattern('[a-zA-ZÑñ ]*')],
+        [Validators.required, Validators.pattern('[a-zA-ZÑñ][a-zA-ZÑñ ]*')],
       ],
       middle_name: [
         '',
@@ -36,7 +36,7 @@ export class SelectCreatePage implements OnInit {
       ],
       last_name: [
         '',
-        [Validators.required, Validators.pattern('[a-zA-ZÑñ ]*')],
+        [Validators.required, Validators.pattern('[a-zA-ZÑñ][a-zA-ZÑñ ]*')],
       ],
       birth_date: ['', [Validators.required]],
     });

@@ -61,12 +61,6 @@ export class GenerateQrcodePage
     //qr code encoded data
     this.qr_text = {
       number: this.ticket_details.number,
-      // violator: `${this.ticket_details.violator.first_name} ${this.ticket_details.violator.middle_name} ${this.ticket_details.violator.last_name}`,
-      // offense_number: this.ticket_details.offense_number,
-      // vehicle_type: this.ticket_details.vehicle_type,
-      // apprehension_datetime: this.ticket_details.apprehension_datetime,
-      // issued_by: this.ticket_details.issued_by,
-      // violations: this.ticket_details.violations,
     };
     // Options for QRCode
     const options = {

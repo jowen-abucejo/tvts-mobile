@@ -14,7 +14,7 @@ export const API_URL = {
   GET_ONE_TICKET: `tickets/ticket`,
   GET_TICKETS: `tickets`,
   GET_TICKET_COUNT_BY_DATE: `tickets/count/by-date`,
-  GET_EXTRA_INPUTS: `forms/ext/fields`,
+  GET_EXTRA_INPUTS: `forms/ext/input/fields`,
   UPDATE_USER: `users/user`,
   EMAIL_QRCODE: `tickets/email-qr`,
   GET_IMAGE: `resources/image`,
@@ -89,6 +89,7 @@ export class ApiService {
    * @returns Returns a promise that resolves with an object of ticket details
    */
   getTicketDetails(ticket_number: any) {
+    ticket_number = encodeURIComponent(ticket_number);
     return this.http
       .get(
         `${this.api.domain}/api/${this.api.version}/${API_URL.GET_ONE_TICKET}/${ticket_number}`,
@@ -121,7 +122,7 @@ export class ApiService {
           page,
           limit,
           order,
-          search,
+          search: encodeURIComponent(search),
         },
       }
     );
@@ -164,6 +165,11 @@ export class ApiService {
       .toPromise();
   }
 
+  /**
+   *
+   * @param formData updated username and password, new password confirmation and the current password for the current user account
+   * @returns Returns a promise with the status if update is successful or not
+   */
   updateAccount(formData: FormData) {
     return this.http
       .post(
@@ -176,6 +182,12 @@ export class ApiService {
       .toPromise();
   }
 
+  /**
+   *
+   * @param ticket_number the ticket number of generated image
+   * @param qr_image the generated citation ticket
+   * @returns Returns a promise with the status if ticket is emailed successfully
+   */
   sendQRToEmail(ticket_number: any, qr_image: FormData) {
     return this.http
       .post(
@@ -188,6 +200,11 @@ export class ApiService {
       .toPromise();
   }
 
+  /**
+   *
+   * @param password the password to be matched with the current user account
+   * @returns Returns a promise with the result if password is matched to the account
+   */
   confirmPassword(password: FormData) {
     return this.http
       .post(
@@ -200,6 +217,11 @@ export class ApiService {
       .toPromise();
   }
 
+  /**
+   *
+   * @param url the path of the requested image
+   * @returns Returns a promise with blob of the requested image
+   */
   requestImage(url) {
     return this.http
       .get(

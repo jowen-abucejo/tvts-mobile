@@ -26,19 +26,27 @@
         <ion-label color="dark">DRIVER'S DETAILS</ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-label position="floating">Last Name</ion-label>
+        <ion-label position="floating" class="required-field"
+          >Last Name</ion-label
+        >
         <ion-input formControlName="last_name"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">First Name</ion-label>
+        <ion-label position="floating" class="required-field"
+          >First Name</ion-label
+        >
         <ion-input formControlName="first_name"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Middle Name</ion-label>
+        <ion-label position="floating" class="required-field"
+          >Middle Name</ion-label
+        >
         <ion-input formControlName="middle_name"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Birth Date</ion-label>
+        <ion-label position="floating" class="required-field"
+          >Birth Date</ion-label
+        >
         <ion-datetime
           display-format="DD.MMM.YYYY"
           formControlName="birth_date"
@@ -60,6 +68,7 @@
           [options]="extra_input.options"
           (toggleEvent)="toggleValue($event)"
           (imageCaptureEvent)="pushImage($event)"
+          [required_field]="extra_input.is_required"
         ></app-custom-input>
       </ng-container>
     </ion-list>
@@ -68,7 +77,9 @@
         <ion-label color="dark">TRAFFIC RELATED VIOLATION</ion-label>
       </ion-list-header>
       <ion-item>
-        <ion-label position="floating">Vehicle Type</ion-label>
+        <ion-label position="floating" class="required-field"
+          >Vehicle Type</ion-label
+        >
         <ion-select
           (ionChange)="changeSelectViolations()"
           formControlName="vehicle_type"
@@ -79,7 +90,9 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Committed Violations</ion-label>
+        <ion-label position="floating" class="required-field"
+          >Committed Violations</ion-label
+        >
         <ion-select
           multiple="true"
           formControlName="committed_violations"
@@ -104,6 +117,7 @@
           [options]="extra_input.options"
           (toggleEvent)="toggleValue($event)"
           (imageCaptureEvent)="pushImage($event)"
+          [required_field]="extra_input.is_required"
         ></app-custom-input>
       </ng-container>
     </ion-list>

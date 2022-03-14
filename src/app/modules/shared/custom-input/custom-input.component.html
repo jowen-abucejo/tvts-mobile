@@ -2,7 +2,11 @@
   [formGroup]="parentForm"
   *ngIf="input_types_cast.indexOf(type) > -1 && parentForm.get(controller)"
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-input
     type="{{ type }}"
     placeholder="{{ placeholder }}"
@@ -21,7 +25,11 @@
       parentForm.get(controller))
   "
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-input
     type="text"
     placeholder="{{ placeholder }}"
@@ -34,7 +42,11 @@
   [formGroup]="parentForm"
   *ngIf="type == 'number' && parentForm.get(controller)"
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-input
     type="{{ type }}"
     placeholder="{{ placeholder }}"
@@ -49,7 +61,9 @@
   *ngIf="type == 'boolean' && !disabled && parentForm.get(controller)"
   lines="full"
 >
-  <ion-label>{{ label }}</ion-label>
+  <ion-label [ngClass]="{ 'required-field': required_field }">{{
+    label
+  }}</ion-label>
   <ion-toggle (ionChange)="toggleValue()"></ion-toggle>
 </ion-item>
 <ion-item
@@ -57,7 +71,9 @@
   *ngIf="type == 'boolean' && disabled && parentForm.get(controller)"
   lines="full"
 >
-  <ion-label>{{ label }}</ion-label>
+  <ion-label [ngClass]="{ 'required-field': required_field }">{{
+    label
+  }}</ion-label>
   <ion-toggle
     disabled="{{ disabled }}"
     [formControlName]="controller"
@@ -68,7 +84,11 @@
   [formGroup]="parentForm"
   *ngIf="type == 'date' && parentForm.get(controller)"
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-datetime
     display-format="DD.MMM.YYYY"
     [formControlName]="controller"
@@ -83,7 +103,11 @@
     (type == 'selection' && parentForm.get(controller) && !disabled)
   "
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-select
     [multiple]="isMultipleSelect"
     [formControlName]="controller"
@@ -102,7 +126,11 @@
   [formGroup]="parentForm"
   *ngIf="type == 'mobile' && parentForm.get(controller)"
 >
-  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-label
+    [ngClass]="{ 'required-field': required_field }"
+    position="floating"
+    >{{ label }}</ion-label
+  >
   <ion-input
     type="text"
     placeholder="10-digit #"
@@ -119,7 +147,9 @@
   *ngIf="type == 'image'"
   [hidden]="!imageData"
 >
-  <ion-label>{{ label }}</ion-label>
+  <ion-label [ngClass]="{ 'required-field': required_field }">{{
+    label
+  }}</ion-label>
   <ion-thumbnail slot="end" (click)="zoomImage()">
     <img src="{{ imageData }}" />
   </ion-thumbnail>
@@ -135,5 +165,7 @@
   class="ion-margin"
 >
   <ion-icon name="camera" slot="start"></ion-icon>
-  <ion-label>{{ label }}</ion-label>
+  <ion-label [ngClass]="{ 'required-field': required_field }">{{
+    label
+  }}</ion-label>
 </ion-button>

@@ -31,8 +31,20 @@
 .alert-violation-selection {
   --width: 90%;
 }
-
+.alert-tappable.sc-ion-alert-md {
+  height: initial !important;
+  contain: initial !important;
+}
 .alert-checkbox-button-disabled.sc-ion-alert-md
   .alert-button-inner.sc-ion-alert-md {
   opacity: 1;
+}
+
+body.qrscanner {
+  background-color: transparent;
+}
+
+ion-label.required-field::after {
+  content: "*";
+  color: var(--ion-color-danger);
 }

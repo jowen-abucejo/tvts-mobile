@@ -40,8 +40,10 @@ export class SelectSearchPage implements OnInit, OnDestroy, ViewWillLeave {
     if (allowed) {
       this.isScanning = true;
       const result = await BarcodeScanner.startScan();
+      document.body.classList.add('qrscanner');
       if (result.hasContent) {
         this.isScanning = false;
+        document.body.classList.remove('qrscanner');
         const qr_text = JSON.parse(result.content);
         this.searchTicket(qr_text.number);
       }
@@ -128,5 +130,6 @@ export class SelectSearchPage implements OnInit, OnDestroy, ViewWillLeave {
       () => {}
     );
     this.isScanning = false;
+    document.body.classList.remove('qrscanner');
   }
 }
