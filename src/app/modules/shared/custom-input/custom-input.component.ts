@@ -158,11 +158,14 @@ export class CustomInputComponent implements OnInit, ViewDidLeave, OnDestroy {
   }
 
   private createImageFromBlob(image: Blob) {
+    let requestedImage: any;
     let reader = new FileReader();
     reader.addEventListener(
       'load',
       () => {
-        this.imageData = reader.result;
+        requestedImage = reader.result;
+        requestedImage.substr(requestedImage.indexOf(', ') + 1);
+        this.imageData = requestedImage.replace('text/html', 'image/jpeg');
       },
       false
     );

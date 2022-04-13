@@ -95,7 +95,7 @@ export class CreateTicketPage implements OnInit, OnDestroy, ViewDidLeave {
         this.searched_violator.license_number != 'null'
           ? this.searched_violator.license_number
           : '',
-        [Validators.pattern('[0-9]*')],
+        [Validators.pattern('[a-zA-Z0-9]*')],
       ],
       vehicle_type: ['', [Validators.required]],
       committed_violations: [null, [Validators.required]],
