@@ -66,8 +66,9 @@ export class CustomInputComponent implements OnInit, ViewDidLeave, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.disabled && this.type === 'image') {
-      this.requestImage(this.parentForm.get(this.controller).value);
+    if (this.type === 'image' && this.parentForm) {
+      const raw_image = this.parentForm.get(this.controller).value;
+      if (raw_image) this.requestImage(raw_image);
     }
   }
 

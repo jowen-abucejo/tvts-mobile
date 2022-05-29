@@ -63,7 +63,13 @@ export class ReadTicketPage implements OnInit {
       this.ticketFormGroup.addControl(
         extra_input.propertyDescription.property,
         new FormControl(
-          extra_input.property_value != 'null' ? extra_input.property_value : ''
+          extra_input.property_value != 'null'
+            ? extra_input.propertyDescription.data_type == 'selection' &&
+              extra_input.propertyDescription.is_multiple_select &&
+              extra_input.property_value
+              ? extra_input.property_value.split(',')
+              : extra_input.property_value
+            : ''
         )
       );
     });
@@ -71,7 +77,13 @@ export class ReadTicketPage implements OnInit {
       this.ticketFormGroup.addControl(
         extra_input.propertyDescription.property,
         new FormControl(
-          extra_input.property_value != 'null' ? extra_input.property_value : ''
+          extra_input.property_value != 'null'
+            ? extra_input.propertyDescription.data_type == 'selection' &&
+              extra_input.propertyDescription.is_multiple_select &&
+              extra_input.property_value
+              ? extra_input.property_value.split(',')
+              : extra_input.property_value
+            : ''
         )
       );
     });
